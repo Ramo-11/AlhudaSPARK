@@ -1,0 +1,13 @@
+:root {
+    --primary-color: #d0a764;
+    --secondary-color: #827153;
+    --accent-color: #d0a764;
+    --text-dark: #000000;
+    --text-light: #ffffff;
+    --bg-light: #f8fafc;
+    --white: #ffffff;
+    --nav-bg: #ffffff;
+    --footer-bg: #1a1a1a;
+    --footer-text: #ffffff;
+    --gradient: linear-gradient(135deg, #d0a764 0%, #d0a764 100%);
+}
