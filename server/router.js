@@ -19,6 +19,10 @@ const {
     upload
 } = require("./controllers/teamRegistrationController");
 
+const { 
+    submitContactForm 
+} = require("./controllers/contactController");
+
 
 // Environment configuration
 const isProd = process.env.NODE_ENV === "production"
@@ -150,7 +154,6 @@ route.post("/api/sponsor/zeffy-payment", createZeffyPaymentSession); // For Zeff
 route.post("/api/webhooks/zeffy", express.raw({ type: 'application/json' }), handleZeffyWebhook);
 
 // Team registration endpoint
-// log that we got the request
 route.post("/api/team-registration", upload, registerTeam);
 
 // Vendor registration endpoint (to be implemented)
@@ -159,11 +162,8 @@ route.post("/api/vendor-registration", (req, res) => {
     res.json({ success: true, message: "Vendor registration endpoint" });
 });
 
-// Contact form endpoint (to be implemented)
-route.post("/api/contact", (req, res) => {
-    // Placeholder - implement contact form logic
-    res.json({ success: true, message: "Contact form endpoint" });
-});
+// Contact form endpoint
+route.post("/api/contact", submitContactForm);
 
 // *********** Error handling **********
 

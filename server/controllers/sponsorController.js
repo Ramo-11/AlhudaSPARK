@@ -117,16 +117,6 @@ const getPaymentInstructions = (sponsor) => {
                 <strong>Reference:</strong> ${sponsor.sponsorId}
             `
         },
-        'cash': {
-            title: 'Payment by Cash',
-            text: 'Please deliver your cash payment to our office or at the event registration desk.',
-            details: `
-                <strong>Amount:</strong> $${sponsor.amount.toLocaleString()}<br>
-                <strong>Reference:</strong> ${sponsor.sponsorId}<br>
-                <strong>Company:</strong> ${sponsor.companyName}<br><br>
-                Please request a receipt upon payment.
-            `
-        },
         'zelle': {
             title: 'Payment by Zelle',
             text: 'Please send your Zelle payment using the following information:',
@@ -401,7 +391,6 @@ const sendAdminNotificationEmail = async (sponsor) => {
                                 ${sponsor.paymentMethod === 'check' ? '<p>Watch for check arrival via mail.</p>' : ''}
                                 ${sponsor.paymentMethod === 'zelle' ? '<p>Check Zelle account for incoming transfer.</p>' : ''}
                                 ${sponsor.paymentMethod === 'venmo' ? '<p>Check Venmo account for incoming payment.</p>' : ''}
-                                ${sponsor.paymentMethod === 'cash' ? '<p>Coordinate cash collection with sponsor.</p>' : ''}
                             </div>
                             
                             <p><a href="${process.env.BASE_URL}/admin/sponsors" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">View All Sponsors</a></p>

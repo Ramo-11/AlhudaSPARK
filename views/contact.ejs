@@ -1,0 +1,151 @@
+<!-- Contact Page -->
+<section class="contact-hero">
+    <div class="container">
+        <h1 class="page-title">Contact Us</h1>
+        <p class="page-subtitle">
+            Get in touch with Alhuda SPARK - we'd love to hear from you
+        </p>
+    </div>
+</section>
+
+<!-- Contact Information -->
+<section class="contact-info-section">
+    <div class="container">
+        <div class="contact-info-grid">
+            <!-- Contact Details -->
+            <div class="contact-details">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-content">
+                        <h3>Email</h3>
+                        <a href="mailto:info@alhudaSPARK.org">info@alhudaSPARK.org</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-content">
+                        <h3>Phone</h3>
+                        <a href="tel:+1234567890">(123) 456-7890</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-content">
+                        <h3>Address</h3>
+                        <p>123 Community Center Drive<br>Noblesville, IN 46060</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <div class="contact-content">
+                        <h3>Office Hours</h3>
+                        <p>Monday - Friday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM<br>Sunday: Closed</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-container">
+                <h2 class="form-title">Send Us A Message</h2>
+                
+                <!-- Success Message -->
+                <div id="successMessage" class="alert alert-success" style="display: none;">
+                    <strong>Success!</strong> <span id="successText"></span>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="alert alert-error" style="display: none;">
+                    <strong>Error:</strong> <span id="errorText"></span>
+                </div>
+
+                <form id="contactForm" class="contact-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="subject">Subject *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="programs">Programs & Events</option>
+                                <option value="volunteering">Volunteering Opportunities</option>
+                                <option value="sponsorship">Sponsorship</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="support">Technical Support</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="5" required placeholder="Please tell us how we can help you..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                            Send Message
+                        </button>
+                        <p class="form-note">
+                            * Required fields
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Modal -->
+<div id="successModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Message Sent Successfully</h3>
+            <button type="button" class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="success-icon">✓</div>
+            <h4>Thank you for contacting us!</h4>
+            <p>We have received your message and will get back to you within 24-48 hours.</p>
+            <div class="response-time">
+                <strong>Expected Response Time:</strong> 1-2 business days
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="modalDone">Done</button>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Error</h3>
+            <button type="button" class="modal-close" id="errorModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="error-icon">⚠️</div>
+            <h4>Something went wrong</h4>
+            <p id="errorModalText"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="errorModalOk">OK</button>
+        </div>
+    </div>
+</div>

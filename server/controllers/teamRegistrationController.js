@@ -341,16 +341,6 @@ const getPaymentInstructions = (team) => {
                 <strong>Reference:</strong> ${team.teamId}
             `
         },
-        'cash': {
-            title: 'Payment by Cash',
-            text: 'Please deliver your cash payment to our office or at the event registration desk.',
-            details: `
-                <strong>Amount:</strong> $${team.registrationFee.toLocaleString()}<br>
-                <strong>Reference:</strong> ${team.teamId}<br>
-                <strong>Team:</strong> ${team.teamName}<br><br>
-                Please request a receipt upon payment.
-            `
-        },
         'zelle': {
             title: 'Payment by Zelle',
             text: 'Please send your Zelle payment using the following information:',
@@ -671,7 +661,6 @@ const sendAdminNotificationEmail = async (team) => {
                                 ${team.paymentMethod === 'check' ? '<p>Watch for check arrival via mail.</p>' : ''}
                                 ${team.paymentMethod === 'zelle' ? '<p>Check Zelle account for incoming transfer.</p>' : ''}
                                 ${team.paymentMethod === 'venmo' ? '<p>Check Venmo account for incoming payment.</p>' : ''}
-                                ${team.paymentMethod === 'cash' ? '<p>Coordinate cash collection with team.</p>' : ''}
                             </div>
                             
                             <p><a href="${process.env.BASE_URL}/admin/teams" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">View All Teams</a></p>
