@@ -6,11 +6,11 @@ const customFormat = format.combine(
     return `${info.timestamp} = [${info.level.toUpperCase().padEnd(6)}] - ${info.message}`
 }))
 
-const generalLogger = createLogger({
+const logger = createLogger({
     format: customFormat,
     transports: [
         new transports.File({filename: "./logs/general.log", level: "silly"})
     ]
 })
 
-module.exports = { generalLogger }
+module.exports = { logger }

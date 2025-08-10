@@ -1,0 +1,269 @@
+<!-- Sponsorship Page -->
+<section class="sponsorship-hero">
+    <div class="container">
+        <h1 class="page-title">Become a Sponsor</h1>
+        <p class="page-subtitle">
+            Partner with Alhuda SPARK and make a lasting impact on youth development through sports and education
+        </p>
+    </div>
+</section>
+
+<!-- Sponsorship Tiers -->
+<section class="tiers-section">
+    <div class="container">
+        <h2 class="section-title">Sponsorship Tiers</h2>
+        <p class="section-subtitle">Choose the sponsorship level that best fits your organization</p>
+        
+        <div class="tiers-grid">
+            <!-- Diamond Tier -->
+            <div class="tier-card tier-diamond" data-tier="diamond" data-amount="10000">
+                <div class="tier-header">
+                    <div class="tier-icon">💎</div>
+                    <h3 class="tier-name">Diamond Sponsor</h3>
+                    <div class="tier-price">$10,000</div>
+                </div>
+                <ul class="tier-benefits">
+                    <li>Premium logo placement on all marketing materials</li>
+                    <li>Main stage banner display throughout event</li>
+                    <li>10-minute presentation opportunity during opening ceremony</li>
+                    <li>VIP booth space at prime location</li>
+                    <li>20 complimentary event passes</li>
+                    <li>Full-page ad in tournament program</li>
+                    <li>Social media spotlight campaign</li>
+                    <li>Trophy presentation rights</li>
+                </ul>
+                <button class="btn btn-primary select-tier" data-tier="diamond">Select Diamond</button>
+            </div>
+
+            <!-- Platinum Tier -->
+            <div class="tier-card tier-platinum" data-tier="platinum" data-amount="5000">
+                <div class="tier-header">
+                    <div class="tier-icon">🏆</div>
+                    <h3 class="tier-name">Platinum Sponsor</h3>
+                    <div class="tier-price">$5,000</div>
+                </div>
+                <ul class="tier-benefits">
+                    <li>Prominent logo placement on marketing materials</li>
+                    <li>Court-side banner display</li>
+                    <li>5-minute presentation during event</li>
+                    <li>Premium booth space</li>
+                    <li>15 complimentary event passes</li>
+                    <li>Half-page ad in tournament program</li>
+                    <li>Social media recognition</li>
+                    <li>Award presentation opportunity</li>
+                </ul>
+                <button class="btn btn-primary select-tier" data-tier="platinum">Select Platinum</button>
+            </div>
+
+            <!-- Gold Tier -->
+            <div class="tier-card tier-gold" data-tier="gold" data-amount="2500">
+                <div class="tier-header">
+                    <div class="tier-icon">🥇</div>
+                    <h3 class="tier-name">Gold Sponsor</h3>
+                    <div class="tier-price">$2,500</div>
+                </div>
+                <ul class="tier-benefits">
+                    <li>Logo on event website and program</li>
+                    <li>Venue banner display</li>
+                    <li>Standard booth space</li>
+                    <li>10 complimentary event passes</li>
+                    <li>Quarter-page ad in program</li>
+                    <li>Social media mentions</li>
+                    <li>Recognition during ceremonies</li>
+                </ul>
+                <button class="btn btn-primary select-tier" data-tier="gold">Select Gold</button>
+            </div>
+
+            <!-- Silver Tier -->
+            <div class="tier-card tier-silver" data-tier="silver" data-amount="1000">
+                <div class="tier-header">
+                    <div class="tier-icon">🥈</div>
+                    <h3 class="tier-name">Silver Sponsor</h3>
+                    <div class="tier-price">$1,000</div>
+                </div>
+                <ul class="tier-benefits">
+                    <li>Logo on event website</li>
+                    <li>Name listing in program</li>
+                    <li>5 complimentary event passes</li>
+                    <li>Certificate of appreciation</li>
+                    <li>Social media thank you post</li>
+                    <li>Recognition on sponsor board</li>
+                </ul>
+                <button class="btn btn-primary select-tier" data-tier="silver">Select Silver</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Form -->
+<section class="registration-section">
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Sponsor Registration</h2>
+            
+            <!-- Success Message -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                <strong>Success!</strong> <span id="successText"></span>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-error" style="display: none;">
+                <strong>Error:</strong> <span id="errorText"></span>
+            </div>
+
+            <form id="sponsorshipForm" class="sponsor-form">
+                <!-- Selected Tier Display -->
+                <div class="selected-tier-display" id="selectedTierDisplay" style="display: none;">
+                    <span class="selected-label">Selected Tier:</span>
+                    <span class="selected-tier" id="selectedTierText"></span>
+                    <span class="selected-amount" id="selectedAmountText"></span>
+                    <button type="button" class="change-tier">Change</button>
+                </div>
+
+                <!-- Company Information -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Company Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="companyName">Company Name *</label>
+                            <input type="text" id="companyName" name="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPerson">Contact Person *</label>
+                            <input type="text" id="contactPerson" name="contactPerson" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="address">Company Address</label>
+                            <input type="text" id="address" name="address">
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="website">Company Website</label>
+                            <input type="url" id="website" name="website" placeholder="https://">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden Tier Selection -->
+                <input type="hidden" id="selectedTier" name="selectedTier" required>
+                <input type="hidden" id="sponsorAmount" name="sponsorAmount" required>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Payment Method</h3>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="check" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">✓</span>
+                                <span class="payment-name">Check</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cash" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">💵</span>
+                                <span class="payment-name">Cash</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="zelle" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">Z</span>
+                                <span class="payment-name">Zelle</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="venmo" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">V</span>
+                                <span class="payment-name">Venmo</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="stripe" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">💳</span>
+                                <span class="payment-name">Credit/Debit Card</span>
+                                <span class="payment-note">3% processing fee</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="zeffy" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">Z</span>
+                                <span class="payment-name">Zeffy</span>
+                                <span class="payment-note">Optional donation fee</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <div class="form-group full-width">
+                        <label for="comments">Additional Comments or Special Requests</label>
+                        <textarea id="comments" name="comments" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                        Complete Registration
+                    </button>
+                    <p class="form-note">
+                        * Required fields
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Payment Instructions Modal -->
+<div id="paymentModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Complete Your Sponsorship</h3>
+            <button type="button" class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="success-icon">✓</div>
+            <h4>Thank you for your commitment to sponsor Alhuda SPARK!</h4>
+            <p id="paymentInstructions"></p>
+            <div class="payment-details" id="paymentDetails"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="modalDone">Done</button>
+        </div>
+    </div>
+</div>
+
+<div id="errorModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Error</h3>
+            <button type="button" class="modal-close" id="errorModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="error-icon">⚠️</div>
+            <h4>Something went wrong</h4>
+            <p id="errorModalText"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="errorModalOk">OK</button>
+        </div>
+    </div>
+</div>

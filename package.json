@@ -1,7 +1,7 @@
 {
-  "name": "AlhudaSpark",
+  "name": "AlhudaSPARK",
   "version": "1.0.0",
-  "description": "website for AlhudaSpark",
+  "description": "website for AlhudaSPARK",
   "main": "app.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon app.js",
@@ -34,7 +34,8 @@
     "nodemailer": "^7.0.5",
     "stripe": "^18.4.0",
     "winston": "^3.17.0",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "axios": "^1.11.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

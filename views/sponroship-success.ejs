@@ -1,0 +1,290 @@
+<!-- Sponsorship Success Page -->
+<section class="success-hero">
+    <div class="container">
+        <div class="success-content">
+            <div class="success-icon">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            
+            <h1 class="success-title">Thank You for Your Sponsorship!</h1>
+            
+            <% if (typeof sponsor !== 'undefined' && sponsor) { %>
+                <div class="sponsor-details">
+                    <p class="success-message">
+                        Thank you, <strong><%= sponsor.companyName %></strong>, for becoming a 
+                        <strong><%= sponsor.tierDisplayName %></strong> sponsor of Alhuda SPARK 2025!
+                    </p>
+                    
+                    <div class="confirmation-box">
+                        <h3>Sponsorship Details</h3>
+                        <div class="detail-row">
+                            <span class="detail-label">Sponsor ID:</span>
+                            <span class="detail-value"><%= sponsor.sponsorId %></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Company:</span>
+                            <span class="detail-value"><%= sponsor.companyName %></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Tier:</span>
+                            <span class="detail-value"><%= sponsor.tierDisplayName %></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Amount:</span>
+                            <span class="detail-value">$<%= sponsor.amount.toLocaleString() %></span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Payment Status:</span>
+                            <span class="detail-value status-<%= sponsor.paymentStatus %>">
+                                <%= sponsor.paymentStatus.charAt(0).toUpperCase() + sponsor.paymentStatus.slice(1) %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            <% } else { %>
+                <p class="success-message">
+                    Your sponsorship registration has been received. We'll be in touch soon with more details!
+                </p>
+            <% } %>
+            
+            <div class="next-steps">
+                <h3>What Happens Next?</h3>
+                <ul class="steps-list">
+                    <li>You'll receive a confirmation email with your sponsorship details</li>
+                    <li>Our team will contact you within 2-3 business days</li>
+                    <li>We'll coordinate the delivery of your sponsorship benefits</li>
+                    <li>You'll receive updates about the tournament as we get closer to the event</li>
+                </ul>
+            </div>
+            
+            <div class="contact-info">
+                <p>If you have any questions, please contact us:</p>
+                <p>
+                    <strong>Email:</strong> <a href="mailto:sponsors@alhudaspark.org">sponsors@alhudaspark.org</a><br>
+                    <strong>Phone:</strong> <a href="tel:+13175551234">(317) 555-1234</a>
+                </p>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">Return to Home</a>
+                <a href="/contact" class="btn btn-outline">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Success Page Styles */
+.success-hero {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, rgba(208, 167, 100, 0.1) 0%, rgba(130, 113, 83, 0.05) 100%);
+}
+
+.success-content {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.success-icon {
+    margin: 0 auto 2rem;
+    color: #28a745;
+}
+
+.success-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.success-message {
+    font-size: 1.25rem;
+    color: #555;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.confirmation-box {
+    background: var(--white);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 500px;
+    text-align: left;
+}
+
+.confirmation-box h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.detail-value {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.status-completed {
+    color: #28a745;
+}
+
+.status-processing {
+    color: #ffc107;
+}
+
+.status-pending {
+    color: #6c757d;
+}
+
+.next-steps {
+    background: var(--bg-light);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: left;
+}
+
+.next-steps h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-dark);
+}
+
+.steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.steps-list li {
+    padding: 0.5rem 0;
+    padding-left: 2rem;
+    position: relative;
+    color: #555;
+}
+
+.steps-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.contact-info {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: rgba(208, 167, 100, 0.1);
+    border-radius: 8px;
+}
+
+.contact-info p {
+    margin: 0.5rem 0;
+    color: #555;
+}
+
+.contact-info a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+.action-buttons {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .success-title {
+        font-size: 2rem;
+    }
+    
+    .success-message {
+        font-size: 1.1rem;
+    }
+    
+    .confirmation-box {
+        padding: 1.5rem;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>

@@ -1,0 +1,252 @@
+<!-- Team Registration Page -->
+<section class="team-hero">
+    <div class="container">
+        <h1 class="page-title">Team Registration</h1>
+        <p class="page-subtitle">
+            Register your team for Alhuda SPARK 2025 Basketball Tournament
+        </p>
+    </div>
+</section>
+
+<!-- Registration Fee Info -->
+<section class="fee-info-section">
+    <div class="container">
+        <div class="fee-info-card">
+            <h2>Registration Fee</h2>
+            <div class="fee-amount">$300</div>
+            <p class="fee-note">per team (covers all players and tournament materials)</p>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Form -->
+<section class="registration-section">
+    <div class="container">
+        <div class="form-container">
+            <h2 class="form-title">Team Registration</h2>
+            
+            <!-- Success Message -->
+            <div id="successMessage" class="alert alert-success" style="display: none;">
+                <strong>Success!</strong> <span id="successText"></span>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="alert alert-error" style="display: none;">
+                <strong>Error:</strong> <span id="errorText"></span>
+            </div>
+
+            <form id="teamRegistrationForm" class="team-form" enctype="multipart/form-data">
+                <!-- Team Information -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Team Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="teamName">Team Name *</label>
+                            <input type="text" id="teamName" name="teamName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="organization">Organization/School/Masjid *</label>
+                            <input type="text" id="organization" name="organization" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tier">Age Tier *</label>
+                            <select id="tier" name="tier" required>
+                                <option value="">Select tier</option>
+                                <option value="elementary">Elementary (Ages 8-12)</option>
+                                <option value="middle">Middle School (Ages 13-15)</option>
+                                <option value="high_school">High School (Ages 16-18)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coach Information -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Coach Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="coachName">Coach Name *</label>
+                            <input type="text" id="coachName" name="coachName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="coachEmail">Coach Email *</label>
+                            <input type="email" id="coachEmail" name="coachEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="coachPhone">Coach Phone *</label>
+                            <input type="tel" id="coachPhone" name="coachPhone" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Players Section -->
+                <div class="form-section">
+                    <div class="players-header">
+                        <h3 class="form-section-title">Players</h3>
+                        <div class="player-count-info">
+                            <span id="playerCount">0</span> / 10 players 
+                            <span class="min-note">(minimum 5 required)</span>
+                        </div>
+                    </div>
+                    
+                    <div id="playersContainer" class="players-container">
+                        <!-- Players will be dynamically added here -->
+                    </div>
+                    
+                    <div class="player-actions">
+                        <button type="button" id="addPlayerBtn" class="btn btn-secondary">
+                            + Add Player
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Emergency Contact</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="emergencyName">Contact Name *</label>
+                            <input type="text" id="emergencyName" name="emergencyContact[name]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyPhone">Contact Phone *</label>
+                            <input type="tel" id="emergencyPhone" name="emergencyContact[phone]" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="emergencyRelationship">Relationship *</label>
+                            <input type="text" id="emergencyRelationship" name="emergencyContact[relationship]" placeholder="e.g., Parent, Guardian" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3 class="form-section-title">Payment Method</h3>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="check" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">✓</span>
+                                <span class="payment-name">Check</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cash" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">💵</span>
+                                <span class="payment-name">Cash</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="zelle" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">Z</span>
+                                <span class="payment-name">Zelle</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="venmo" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">V</span>
+                                <span class="payment-name">Venmo</span>
+                                <span class="payment-note">No fees</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="stripe" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">💳</span>
+                                <span class="payment-name">Credit/Debit Card</span>
+                                <span class="payment-note">3% processing fee</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="zeffy" required>
+                            <div class="payment-card">
+                                <span class="payment-icon">Z</span>
+                                <span class="payment-name">Zeffy</span>
+                                <span class="payment-note">Optional donation fee</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <div class="form-group full-width">
+                        <label for="specialRequirements">Special Requirements</label>
+                        <textarea id="specialRequirements" name="specialRequirements" rows="3" maxlength="300"></textarea>
+                        <div class="char-count">
+                            <span id="specialReqCount">0</span>/300 characters
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="comments">Additional Comments</label>
+                        <textarea id="comments" name="comments" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                        Register Team - $300
+                    </button>
+                    <p class="form-note">
+                        * Required fields
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Payment Instructions Modal -->
+<div id="paymentModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Complete Your Team Registration</h3>
+            <button type="button" class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="success-icon">✓</div>
+            <h4>Thank you for registering your team!</h4>
+            <p id="paymentInstructions"></p>
+            <div class="payment-details" id="paymentDetails"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="modalDone">Done</button>
+        </div>
+    </div>
+</div>
+
+<div id="errorModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Error</h3>
+            <button type="button" class="modal-close" id="errorModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="error-icon">⚠️</div>
+            <h4>Something went wrong</h4>
+            <p id="errorModalText"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="errorModalOk">OK</button>
+        </div>
+    </div>
+</div>

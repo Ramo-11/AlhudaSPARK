@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
 
 const router = require("./server/router")
-const { generalLogger } = require("./server/generalLogger")
+const { logger } = require("./server/logger")
 const connectDB = require('./server/controllers/dbController');
 const { userMiddleware } = require("./server/controllers/sessionController")
 // ********** End Imports **********
@@ -13,7 +13,7 @@ const { userMiddleware } = require("./server/controllers/sessionController")
 // ********** Initialization **************
 const app = express()
 require('dotenv').config()
-generalLogger.debug("Running in " + process.env.NODE_ENV + " mode")
+logger.debug("Running in " + process.env.NODE_ENV + " mode")
 connectDB()
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -34,4 +34,4 @@ app.use(userMiddleware);
 
 app.use("/", router)
 
-app.listen(process.env.PORT, () => generalLogger.info(`server running on port: http://localhost:${process.env.PORT}`))
+app.listen(process.env.PORT, () => logger.info(`server running on port: http://localhost:${process.env.PORT}`))
