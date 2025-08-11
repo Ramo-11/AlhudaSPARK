@@ -87,7 +87,7 @@
                     <div class="file-input-wrapper">
                         <input type="file" id="playerIdPhoto${playerNum}" name="players[${playerNum-1}][idPhoto]" class="file-input" accept="image/*" required>
                         <label for="playerIdPhoto${playerNum}" class="file-input-label">
-                            <span class="file-text">Click to upload ID photo</span>
+                            <span class="file-text">Upload School or State ID</span>
                         </label>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                 fileText.textContent = file.name;
                 fileLabel.classList.add('has-file');
             } else {
-                fileText.textContent = 'Click to upload ID photo';
+                fileText.textContent = 'Upload School or State ID';
                 fileLabel.classList.remove('has-file');
             }
         });

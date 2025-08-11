@@ -150,7 +150,7 @@ const submitContactForm = async (req, res) => {
                     
                     <p style="margin: 20px 0; color: #374151; line-height: 1.6;">
                         If you have any urgent questions, please don't hesitate to call us at 
-                        <a href="tel:+15551234567" style="color: #0f4f9f; text-decoration: none;">(917) 957-6104</a>.
+                        <a href="tel:+13175377245" style="color: #0f4f9f; text-decoration: none;">(317) 537-7245</a>.
                     </p>
                     
                     <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">

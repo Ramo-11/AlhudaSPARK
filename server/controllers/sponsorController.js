@@ -262,7 +262,7 @@ const sendSponsorConfirmationEmail = async (sponsor) => {
                             <p>If you have any questions or need assistance, please don't hesitate to contact us:</p>
                             <p>
                                 <strong>Email:</strong> sponsors@alhudaspark.org<br>
-                                <strong>Phone:</strong> (317) 555-1234
+                                <strong>Phone:</strong> (317) 537-7245
                             </p>
                             
                             <p>We look forward to partnering with you for this exciting event!</p>

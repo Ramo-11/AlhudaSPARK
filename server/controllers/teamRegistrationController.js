@@ -126,7 +126,7 @@ const registerTeam = async (req, res) => {
 
         // Get registration fee
         const fees = Team.getRegistrationFees();
-        const registrationFee = fees[tier] || 300;
+        const registrationFee = fees[tier] || 350;
 
         // Create team record
         const team = new Team({
@@ -476,7 +476,7 @@ const sendTeamConfirmationEmail = async (team) => {
                             <p>If you have any questions or need assistance, please don't hesitate to contact us:</p>
                             <p>
                                 <strong>Email:</strong> teams@alhudaspark.org<br>
-                                <strong>Phone:</strong> (317) 555-1234
+                                <strong>Phone:</strong> (317) 537-7245
                             </p>
                             
                             <p>We're excited to have ${team.teamName} participate in Alhuda SPARK 2025!</p>
