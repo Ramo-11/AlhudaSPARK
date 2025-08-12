@@ -4,7 +4,7 @@
 
     // State
     let playerCount = 0;
-    const MIN_PLAYERS = 1;
+    const MIN_PLAYERS = 5;
     const MAX_PLAYERS = 10;
 
     // DOM Elements

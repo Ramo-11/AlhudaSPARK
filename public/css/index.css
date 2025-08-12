@@ -204,8 +204,13 @@
 
 .hero-visual {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.hero-visual > * {
+    flex: 0 0 calc(50% - 1rem); /* 2 items per row */
 }
 
 .event-card {
@@ -371,7 +376,7 @@
 
 .spark-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 2rem;
     max-width: 1000px;
     margin: 0 auto;
@@ -1042,6 +1047,16 @@
     .hero-actions .btn {
         padding: 0.75rem 1.5rem;
     }
+
+    .hero-visual {
+       flex-direction: column;
+       gap: 1.5rem;
+    }
+   
+   .event-card {
+       max-width: 100%;
+       padding: 1.5rem;
+   }
 
     .title-line {
         font-size: 1.75rem;

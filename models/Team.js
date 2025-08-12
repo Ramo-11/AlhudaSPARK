@@ -105,7 +105,7 @@ const teamSchema = new mongoose.Schema({
         validate: [
             {
                 validator: function(players) {
-                    return players.length >= 1;
+                    return players.length >= 5;
                 },
                 message: 'Team must have at least 5 players'
             },

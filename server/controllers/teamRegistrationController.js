@@ -249,12 +249,12 @@ const processPlayersDataWithCloudinary = async (body, files, teamId) => {
         }
 
         // Validate player count
-        if (players.length < 1) {
+        if (players.length < 5) {
             logger.warn(`Insufficient players for team registration: ${players.length}`);
             await cleanupCloudinaryImages(uploadedImages);
             return {
                 success: false,
-                error: 'Minimum 1 player required'
+                error: 'Minimum 5 player required'
             };
         }
 

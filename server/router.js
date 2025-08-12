@@ -33,8 +33,6 @@ process.env.STRIPE_PUBLIC_KEY = isProd ? process.env.STRIPE_PUBLIC_KEY_PROD : pr
 const route = express.Router()
 
 // *********** GET requests **********
-
-// Home page
 route.get("/", getSponsorsForHomePage, (req, res) => {
     res.render("index", {
         title: "Home",
@@ -46,7 +44,6 @@ route.get("/", getSponsorsForHomePage, (req, res) => {
     });
 });
 
-// Sponsorship page
 route.get("/sponsorship", (req, res) => {
     res.render("sponsorship", {
         title: "Become a Sponsor",
@@ -56,11 +53,8 @@ route.get("/sponsorship", (req, res) => {
         layout: "layout"
     });
 });
-
-// Sponsorship success page
 route.get("/sponsorship/success", getSponsorshipSuccess);
 
-// Team registration page
 route.get("/teams-registration", (req, res) => {
     res.render("teams-registration", {
         title: "Team Registration",
@@ -71,7 +65,6 @@ route.get("/teams-registration", (req, res) => {
     });
 });
 
-// Vendor registration page
 route.get("/vendors", (req, res) => {
     res.render("vendors", {
         title: "Vendor Registration",
@@ -82,7 +75,6 @@ route.get("/vendors", (req, res) => {
     });
 });
 
-// Contact page
 route.get("/contact", (req, res) => {
     res.render("contact", {
         title: "Contact Us",
@@ -93,7 +85,6 @@ route.get("/contact", (req, res) => {
     });
 });
 
-// About page
 route.get("/about", (req, res) => {
     res.render("about", {
         title: "About Us",
@@ -103,7 +94,6 @@ route.get("/about", (req, res) => {
     });
 });
 
-// Schedule page
 route.get("/schedule", (req, res) => {
     res.render("schedule", {
         title: "Tournament Schedule",
@@ -114,7 +104,6 @@ route.get("/schedule", (req, res) => {
     });
 });
 
-// Rules page
 route.get("/rules", (req, res) => {
     res.render("rules", {
         title: "Tournament Rules",
@@ -124,7 +113,6 @@ route.get("/rules", (req, res) => {
     });
 });
 
-// Privacy Policy
 route.get("/privacy-policy", (req, res) => {
     res.render("privacy-policy", {
         title: "Privacy Policy",
@@ -134,7 +122,6 @@ route.get("/privacy-policy", (req, res) => {
     });
 });
 
-// Terms of Service
 route.get("/terms-of-service", (req, res) => {
     res.render("terms-of-service", {
         title: "Terms of Service",
@@ -146,28 +133,19 @@ route.get("/terms-of-service", (req, res) => {
 
 // *********** POST requests **********
 
-// Sponsorship API endpoints
-// Replace line 65 with:
 route.post("/api/sponsor/register", upload.single('logo'), registerSponsor, handleMulterError);
-route.post("/api/sponsor/zeffy-payment", createZeffyPaymentSession); // For Zeffy payments
-
-// Zeffy webhook endpoint
-route.post("/api/webhooks/zeffy", express.raw({ type: 'application/json' }), handleZeffyWebhook);
-
-// Team registration endpoint with Cloudinary upload
 route.post("/api/team-registration", upload.any(), registerTeam, handleMulterError);
-
-// Vendor registration endpoint (to be implemented)
 route.post("/api/vendor-registration", (req, res) => {
     // Placeholder - implement vendor registration logic
     res.json({ success: true, message: "Vendor registration endpoint" });
 });
-
-// Contact form endpoint
 route.post("/api/contact", submitContactForm);
 
-// *********** Error handling **********
+// Zeffy
+// route.post("/api/sponsor/zeffy-payment", createZeffyPaymentSession); // For Zeffy payments
+// route.post("/api/webhooks/zeffy", express.raw({ type: 'application/json' }), handleZeffyWebhook);
 
+// *********** Error handling **********
 // 404 page
 // route.get("*", (req, res) => {
 //     res.status(404).render("404", {
