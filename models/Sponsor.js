@@ -43,7 +43,11 @@ const sponsorSchema = new mongoose.Schema({
         trim: true,
         default: ''
     },
-    
+    logo: {
+        type: String,
+        trim: true,
+    },
+
     // Sponsorship Details
     tier: {
         type: String,

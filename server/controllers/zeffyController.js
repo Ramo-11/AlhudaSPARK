@@ -196,17 +196,18 @@ const saveSponsorRegistration = async (req, res) => {
             });
         }
 
-        // Check if sponsor already exists with same email and tier
+        // Check if sponsor already exists with same email and tier and company name
         const existingSponsor = await Sponsor.findOne({
             email: email.toLowerCase(),
             tier: tier,
+            companyName: companyName,
             paymentStatus: { $in: ['pending', 'processing', 'completed'] }
         });
 
         if (existingSponsor) {
             return res.status(400).json({
                 success: false,
-                error: 'A sponsorship registration already exists for this email and tier combination'
+                error: 'A sponsorship registration already exists for this email, tier, and company name combination'
             });
         }
 

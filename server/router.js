@@ -11,7 +11,8 @@ const {
 } = require("./controllers/zeffyController");
 
 const {
-    registerSponsor
+    registerSponsor,
+    getSponsorsForHomePage
 } = require("./controllers/sponsorController");
 
 const {
@@ -34,13 +35,14 @@ const route = express.Router()
 // *********** GET requests **********
 
 // Home page
-route.get("/", (req, res) => {
+route.get("/", getSponsorsForHomePage, (req, res) => {
     res.render("index", {
         title: "Home",
         description: "Welcome to Alhuda SPARK 2025 - Midwest Basketball Tournament & Quran Competition",
         additionalCSS: ["index.css"],
         additionalJS: ["index.js"],
-        layout: "layout"
+        layout: "layout",
+        sponsors: req.sponsors
     });
 });
 

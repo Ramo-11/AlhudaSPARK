@@ -101,27 +101,27 @@
             <div class="spark-card">
                 <div class="spark-letter">S</div>
                 <h3>Sports</h3>
-                <p>Excellence in athletics and teamwork</p>
+                <p>Basketball, leagues, and fitness</p>
             </div>
             <div class="spark-card">
                 <div class="spark-letter">P</div>
-                <h3>Purpose</h3>
-                <p>Developing meaningful goals and direction</p>
+                <h3>Programs</h3>
+                <p>STEM, arts, bazaar, and community events</p>
             </div>
             <div class="spark-card">
                 <div class="spark-letter">A</div>
-                <h3>Adab</h3>
-                <p>Islamic character and manners</p>
+                <h3>Advancement</h3>
+                <p>Youth growth, leadership, and career skills</p>
             </div>
             <div class="spark-card">
                 <div class="spark-letter">R</div>
-                <h3>Resilience</h3>
-                <p>Building strength through challenges</p>
+                <h3>Resources</h3>
+                <p>Community support, facilities, and mentors</p>
             </div>
             <div class="spark-card">
                 <div class="spark-letter">K</div>
                 <h3>Knowledge</h3>
-                <p>Qur'an, STEM, and life skills</p>
+                <p>Qur’an, academics, and life skills</p>
             </div>
         </div>
     </div>
@@ -244,6 +244,7 @@
         <h2 class="section-title">Our Sponsors</h2>
         <p class="section-subtitle">Thank you to our generous sponsors who make this tournament possible</p>
         
+        <% if (typeof sponsors !== 'undefined' && sponsors.diamond && sponsors.diamond.length > 0) { %>
         <!-- Diamond Sponsors -->
         <div class="sponsor-tier sponsor-tier-diamond">
             <div class="tier-badge">
@@ -251,13 +252,22 @@
                 <span class="tier-name">Diamond Sponsors</span>
             </div>
             <div class="sponsors-grid sponsors-grid-diamond">
-                <!-- These will be dynamically loaded from DB later -->
+                <% sponsors.diamond.forEach(function(sponsor) { %>
                 <div class="sponsor-card sponsor-diamond">
-                    <img src="/images/sponsor-placeholder-diamond.png" alt="Diamond Sponsor" class="sponsor-logo">
+                    <% if (sponsor.logo) { %>
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                    <% } %>
+                    <div class="sponsor-info">
+                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
+                        <span class="sponsor-tier-label">Diamond Sponsor</span>
+                    </div>
                 </div>
+                <% }); %>
             </div>
         </div>
+        <% } %>
 
+        <% if (typeof sponsors !== 'undefined' && sponsors.platinum && sponsors.platinum.length > 0) { %>
         <!-- Platinum Sponsors -->
         <div class="sponsor-tier sponsor-tier-platinum">
             <div class="tier-badge">
@@ -265,16 +275,22 @@
                 <span class="tier-name">Platinum Sponsors</span>
             </div>
             <div class="sponsors-grid sponsors-grid-platinum">
-                <!-- These will be dynamically loaded from DB later -->
+                <% sponsors.platinum.forEach(function(sponsor) { %>
                 <div class="sponsor-card sponsor-platinum">
-                    <img src="/images/sponsor-placeholder-platinum-1.png" alt="Platinum Sponsor 1" class="sponsor-logo">
+                    <% if (sponsor.logo) { %>
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                    <% } %>
+                    <div class="sponsor-info">
+                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
+                        <span class="sponsor-tier-label">Platinum Sponsor</span>
+                    </div>
                 </div>
-                <div class="sponsor-card sponsor-platinum">
-                    <img src="/images/sponsor-placeholder-platinum-2.png" alt="Platinum Sponsor 2" class="sponsor-logo">
-                </div>
+                <% }); %>
             </div>
         </div>
+        <% } %>
 
+        <% if (typeof sponsors !== 'undefined' && sponsors.gold && sponsors.gold.length > 0) { %>
         <!-- Gold Sponsors -->
         <div class="sponsor-tier sponsor-tier-gold">
             <div class="tier-badge">
@@ -282,19 +298,22 @@
                 <span class="tier-name">Gold Sponsors</span>
             </div>
             <div class="sponsors-grid sponsors-grid-gold">
-                <!-- These will be dynamically loaded from DB later -->
+                <% sponsors.gold.forEach(function(sponsor) { %>
                 <div class="sponsor-card sponsor-gold">
-                    <img src="/images/sponsor-placeholder-gold-1.png" alt="Gold Sponsor 1" class="sponsor-logo">
+                    <% if (sponsor.logo) { %>
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                    <% } %>
+                    <div class="sponsor-info">
+                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
+                        <span class="sponsor-tier-label">Gold Sponsor</span>
+                    </div>
                 </div>
-                <div class="sponsor-card sponsor-gold">
-                    <img src="/images/sponsor-placeholder-gold-2.png" alt="Gold Sponsor 2" class="sponsor-logo">
-                </div>
-                <div class="sponsor-card sponsor-gold">
-                    <img src="/images/sponsor-placeholder-gold-3.png" alt="Gold Sponsor 3" class="sponsor-logo">
-                </div>
+                <% }); %>
             </div>
         </div>
+        <% } %>
 
+        <% if (typeof sponsors !== 'undefined' && sponsors.silver && sponsors.silver.length > 0) { %>
         <!-- Silver Sponsors -->
         <div class="sponsor-tier sponsor-tier-silver">
             <div class="tier-badge">
@@ -302,21 +321,20 @@
                 <span class="tier-name">Silver Sponsors</span>
             </div>
             <div class="sponsors-grid sponsors-grid-silver">
-                <!-- These will be dynamically loaded from DB later -->
+                <% sponsors.silver.forEach(function(sponsor) { %>
                 <div class="sponsor-card sponsor-silver">
-                    <img src="/images/sponsor-placeholder-silver-1.png" alt="Silver Sponsor 1" class="sponsor-logo">
+                    <% if (sponsor.logo) { %>
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                    <% } %>
+                    <div class="sponsor-info">
+                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
+                        <span class="sponsor-tier-label">Silver Sponsor</span>
+                    </div>
                 </div>
-                <div class="sponsor-card sponsor-silver">
-                    <img src="/images/sponsor-placeholder-silver-2.png" alt="Silver Sponsor 2" class="sponsor-logo">
-                </div>
-                <div class="sponsor-card sponsor-silver">
-                    <img src="/images/sponsor-placeholder-silver-3.png" alt="Silver Sponsor 3" class="sponsor-logo">
-                </div>
-                <div class="sponsor-card sponsor-silver">
-                    <img src="/images/sponsor-placeholder-silver-4.png" alt="Silver Sponsor 4" class="sponsor-logo">
-                </div>
+                <% }); %>
             </div>
         </div>
+        <% } %>
 
         <div class="sponsor-cta">
             <a href="/sponsorship" class="btn btn-outline">Become a Sponsor</a>

@@ -15,6 +15,34 @@ const createTransporter = () => {
 };
 
 /**
+ * Get sponsors for home page display
+ */
+const getSponsorsForHomePage = async (req, res, next) => {
+    try {
+        // Fetch active sponsors grouped by tier
+        const sponsors = await Sponsor.findActiveSponsors();
+        
+        // Group sponsors by tier for easier template rendering
+        const sponsorsByTier = {
+            diamond: sponsors.filter(s => s.tier === 'diamond'),
+            platinum: sponsors.filter(s => s.tier === 'platinum'),
+            gold: sponsors.filter(s => s.tier === 'gold'),
+            silver: sponsors.filter(s => s.tier === 'silver')
+        };
+        
+        // Add sponsors to req object for use in route handler
+        req.sponsors = sponsorsByTier;
+        next();
+        
+    } catch (error) {
+        console.error('Error fetching sponsors:', error);
+        // Continue with empty sponsors if there's an error
+        req.sponsors = { diamond: [], platinum: [], gold: [], silver: [] };
+        next();
+    }
+};
+
+/**
  * Handle sponsor registration for manual payment methods
  */
 const registerSponsor = async (req, res) => {
@@ -40,17 +68,18 @@ const registerSponsor = async (req, res) => {
             });
         }
 
-        // Check if sponsor already exists with same email and tier
+        // Check if sponsor already exists with same email and tier and company name
         const existingSponsor = await Sponsor.findOne({
             email: email.toLowerCase(),
             tier: tier,
+            companyName: companyName,
             paymentStatus: { $in: ['pending', 'processing', 'completed'] }
         });
 
         if (existingSponsor) {
             return res.status(400).json({
                 success: false,
-                error: 'A sponsorship registration already exists for this email and tier combination'
+                error: 'A sponsorship registration already exists for this email, tier, and company name combination'
             });
         }
 
@@ -411,5 +440,6 @@ const sendAdminNotificationEmail = async (sponsor) => {
 };
 
 module.exports = {
-    registerSponsor
+    registerSponsor,
+    getSponsorsForHomePage
 };
