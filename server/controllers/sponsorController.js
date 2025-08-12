@@ -1,6 +1,8 @@
 // Sponsor Controller for handling non-payment gateway registrations
 const Sponsor = require('../../models/Sponsor');
 const nodemailer = require('nodemailer');
+const { upload, uploadImageToCloudinary } = require('./cloudinaryController');
+const { logger } = require('../logger');
 
 // Create email transporter
 const createTransporter = () => {
@@ -35,7 +37,7 @@ const getSponsorsForHomePage = async (req, res, next) => {
         next();
         
     } catch (error) {
-        console.error('Error fetching sponsors:', error);
+        logger.error('Error fetching sponsors:', error);
         // Continue with empty sponsors if there's an error
         req.sponsors = { diamond: [], platinum: [], gold: [], silver: [] };
         next();
@@ -46,7 +48,32 @@ const getSponsorsForHomePage = async (req, res, next) => {
  * Handle sponsor registration for manual payment methods
  */
 const registerSponsor = async (req, res) => {
+    let uploadedLogo = null;
     try {
+        // Handle logo upload if present
+        if (req.file) {
+            try {
+                if (!req.file.buffer) {
+                    throw new Error('File buffer not found');
+                }
+                
+                const logoResult = await uploadImageToCloudinary(req.file.buffer, {
+                    folder: 'alhuda_spark/sponsors',
+                    transformation: [
+                        { width: 400, height: 400, crop: 'limit' },
+                        { quality: 'auto' },
+                        { fetch_format: 'auto' }
+                    ]
+                });
+                uploadedLogo = {
+                    url: logoResult.secure_url,
+                    publicId: logoResult.public_id
+                };
+            } catch (uploadError) {
+                logger.error(`Logo upload error: ${uploadError.message || uploadError}`);
+                console.error('Logo upload error details:', uploadError);
+            }
+        }
         const {
             companyName,
             contactPerson,
@@ -62,6 +89,7 @@ const registerSponsor = async (req, res) => {
 
         // Validate required fields
         if (!companyName || !contactPerson || !email || !phone || !tier || !amount || !paymentMethod) {
+            logger.error('Missing required fields')
             return res.status(400).json({
                 success: false,
                 error: 'Missing required fields'
@@ -77,6 +105,7 @@ const registerSponsor = async (req, res) => {
         });
 
         if (existingSponsor) {
+            logger.warn(`Duplicate sponsor registration attempt: ${email}, ${tier}, ${companyName}`);
             return res.status(400).json({
                 success: false,
                 error: 'A sponsorship registration already exists for this email, tier, and company name combination'
@@ -95,6 +124,7 @@ const registerSponsor = async (req, res) => {
             phone,
             address: address || '',
             website: website || '',
+            logo: uploadedLogo?.url || '',
             tier,
             amount: parseFloat(amount),
             paymentMethod,
@@ -122,7 +152,16 @@ const registerSponsor = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Sponsor registration error:', error);
+        logger.error(`Sponsor registration error: ${error}`);
+        // Clean up uploaded logo on error
+        if (uploadedLogo?.publicId) {
+            try {
+                const { deleteImageFromCloudinary } = require('./cloudinaryController');
+                await deleteImageFromCloudinary(uploadedLogo.publicId);
+            } catch (cleanupError) {
+                logger.error('Error cleaning up logo:', cleanupError);
+            }
+        }
         res.status(500).json({
             success: false,
             error: 'Failed to save registration. Please try again or contact support.'

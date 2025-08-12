@@ -1,6 +1,7 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 require("dotenv").config();
+const { logger } = require('../logger');
 
 // Configure Cloudinary
 cloudinary.config({
@@ -55,9 +56,10 @@ const uploadImageToCloudinary = async (fileBuffer, options = {}) => {
 const deleteImageFromCloudinary = async (publicId) => {
     try {
         const result = await cloudinary.uploader.destroy(publicId);
+        logger.info(`Deleted image with public ID: ${publicId}`);
         return result;
     } catch (error) {
-        console.error('Error deleting image from Cloudinary:', error);
+        logger.error('Error deleting image from Cloudinary:', error);
         throw error;
     }
 };
@@ -66,6 +68,7 @@ const deleteImageFromCloudinary = async (publicId) => {
 const handleImageUpload = async (req, res) => {
     try {
         if (!req.file) {
+            logger.error('No image file provided in the request');
             return res.status(400).json({ 
                 success: false,
                 error: 'No image file provided' 
@@ -73,6 +76,7 @@ const handleImageUpload = async (req, res) => {
         }
 
         const result = await uploadImageToCloudinary(req.file.buffer);
+        logger.info('Image uploaded successfully:', result);
 
         res.json({
             success: true,
@@ -85,7 +89,7 @@ const handleImageUpload = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Image upload error:', error);
+        logger.error('Image upload error:', error);
         res.status(500).json({ 
             success: false,
             error: 'Failed to upload image',
@@ -98,6 +102,7 @@ const handleImageUpload = async (req, res) => {
 const handleMultipleImageUpload = async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
+            logger.error("No image file provided")
             return res.status(400).json({ 
                 success: false,
                 error: 'No image files provided' 
@@ -106,6 +111,8 @@ const handleMultipleImageUpload = async (req, res) => {
 
         const uploadPromises = req.files.map(file => uploadImageToCloudinary(file.buffer));
         const uploadResults = await Promise.all(uploadPromises);
+
+        logger.debug("Handled multiple image upload successfully")
 
         const images = uploadResults.map(result => ({
             url: result.secure_url,
@@ -123,7 +130,7 @@ const handleMultipleImageUpload = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Multiple image upload error:', error);
+        logger.error('Multiple image upload error:', error);
         res.status(500).json({ 
             success: false,
             error: 'Failed to upload images',
@@ -152,7 +159,7 @@ const handleImageDeletion = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Image deletion error:', error);
+        logger.error('Image deletion error:', error);
         res.status(500).json({ 
             success: false,
             error: 'Failed to delete image',
@@ -165,6 +172,7 @@ const handleImageDeletion = async (req, res) => {
 const handleMulterError = (error, req, res, next) => {
     if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
+            logger.error('Error uploading, file size is more than 10MB')
             return res.status(400).json({ 
                 success: false,
                 error: 'File too large',
@@ -172,6 +180,7 @@ const handleMulterError = (error, req, res, next) => {
             });
         }
         if (error.code === 'LIMIT_FILE_COUNT') {
+            logger.error('Error uploading, too many files')
             return res.status(400).json({ 
                 success: false,
                 error: 'Too many files',
@@ -181,6 +190,7 @@ const handleMulterError = (error, req, res, next) => {
     }
     
     if (error.message === 'Only image files are allowed') {
+        logger.error('Invalid file type')
         return res.status(400).json({ 
             success: false,
             error: 'Invalid file type',

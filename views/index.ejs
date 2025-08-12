@@ -240,106 +240,189 @@
 
 <!-- Sponsors Section -->
 <section class="sponsors-section">
-    <div class="container">
-        <h2 class="section-title">Our Sponsors</h2>
-        <p class="section-subtitle">Thank you to our generous sponsors who make this tournament possible</p>
-        
-        <% if (typeof sponsors !== 'undefined' && sponsors.diamond && sponsors.diamond.length > 0) { %>
-        <!-- Diamond Sponsors -->
-        <div class="sponsor-tier sponsor-tier-diamond">
-            <div class="tier-badge">
-                <span class="tier-icon">💎</span>
-                <span class="tier-name">Diamond Sponsors</span>
-            </div>
-            <div class="sponsors-grid sponsors-grid-diamond">
-                <% sponsors.diamond.forEach(function(sponsor) { %>
-                <div class="sponsor-card sponsor-diamond">
-                    <% if (sponsor.logo) { %>
-                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
-                    <% } %>
-                    <div class="sponsor-info">
-                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
-                        <span class="sponsor-tier-label">Diamond Sponsor</span>
-                    </div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-        <% } %>
-
-        <% if (typeof sponsors !== 'undefined' && sponsors.platinum && sponsors.platinum.length > 0) { %>
-        <!-- Platinum Sponsors -->
-        <div class="sponsor-tier sponsor-tier-platinum">
-            <div class="tier-badge">
-                <span class="tier-icon">🏆</span>
-                <span class="tier-name">Platinum Sponsors</span>
-            </div>
-            <div class="sponsors-grid sponsors-grid-platinum">
-                <% sponsors.platinum.forEach(function(sponsor) { %>
-                <div class="sponsor-card sponsor-platinum">
-                    <% if (sponsor.logo) { %>
-                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
-                    <% } %>
-                    <div class="sponsor-info">
-                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
-                        <span class="sponsor-tier-label">Platinum Sponsor</span>
-                    </div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-        <% } %>
-
-        <% if (typeof sponsors !== 'undefined' && sponsors.gold && sponsors.gold.length > 0) { %>
-        <!-- Gold Sponsors -->
-        <div class="sponsor-tier sponsor-tier-gold">
-            <div class="tier-badge">
-                <span class="tier-icon">🥇</span>
-                <span class="tier-name">Gold Sponsors</span>
-            </div>
-            <div class="sponsors-grid sponsors-grid-gold">
-                <% sponsors.gold.forEach(function(sponsor) { %>
-                <div class="sponsor-card sponsor-gold">
-                    <% if (sponsor.logo) { %>
-                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
-                    <% } %>
-                    <div class="sponsor-info">
-                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
-                        <span class="sponsor-tier-label">Gold Sponsor</span>
-                    </div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-        <% } %>
-
-        <% if (typeof sponsors !== 'undefined' && sponsors.silver && sponsors.silver.length > 0) { %>
-        <!-- Silver Sponsors -->
-        <div class="sponsor-tier sponsor-tier-silver">
-            <div class="tier-badge">
-                <span class="tier-icon">🥈</span>
-                <span class="tier-name">Silver Sponsors</span>
-            </div>
-            <div class="sponsors-grid sponsors-grid-silver">
-                <% sponsors.silver.forEach(function(sponsor) { %>
-                <div class="sponsor-card sponsor-silver">
-                    <% if (sponsor.logo) { %>
-                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
-                    <% } %>
-                    <div class="sponsor-info">
-                        <h4 class="sponsor-name"><%= sponsor.companyName %></h4>
-                        <span class="sponsor-tier-label">Silver Sponsor</span>
-                    </div>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-        <% } %>
-
-        <div class="sponsor-cta">
-            <a href="/sponsorship" class="btn btn-outline">Become a Sponsor</a>
-        </div>
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Our Valued Partners</h2>
+      <p class="section-subtitle">
+        We're proud to partner with these exceptional organizations who share our commitment to community excellence
+      </p>
     </div>
+
+    <% if (typeof sponsors !== 'undefined' && sponsors.diamond && sponsors.diamond.length > 0) { %>
+    <!-- Diamond Sponsors -->
+    <div class="sponsor-tier">
+      <div class="tier-header">
+        <div class="tier-badge diamond">
+          <span class="tier-icon">💎</span>
+          <span class="tier-label">Diamond Partners</span>
+        </div>
+      </div>
+      <div class="sponsors-grid diamond-grid">
+        <% sponsors.diamond.forEach(function(sponsor) { %>
+        <div class="sponsor-card diamond-card">
+          <% if (sponsor.website) { %>
+            <a href="<%= sponsor.website %>" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+          <% } %>
+              <div class="sponsor-content">
+                <% if (sponsor.logo) { %>
+                  <div class="sponsor-logo-wrapper">
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                  </div>
+                <% } else { %>
+                  <div class="sponsor-placeholder">
+                    <div class="placeholder-icon">🏢</div>
+                  </div>
+                <% } %>
+                <div class="sponsor-details">
+                  <h3 class="sponsor-name"><%= sponsor.companyName %></h3>
+                  <% if (sponsor.website) { %>
+                    <div class="sponsor-website">
+                      <span class="website-icon">🔗</span>
+                      <span class="website-url"><%= sponsor.website.replace(/^https?:\/\//, '').replace(/\/$/, '') %></span>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+          <% if (sponsor.website) { %>
+            </a>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (typeof sponsors !== 'undefined' && sponsors.platinum && sponsors.platinum.length > 0) { %>
+    <!-- Platinum Sponsors -->
+    <div class="sponsor-tier">
+      <div class="tier-header">
+        <div class="tier-badge platinum">
+          <span class="tier-icon">🏆</span>
+          <span class="tier-label">Platinum Partners</span>
+        </div>
+      </div>
+      <div class="sponsors-grid platinum-grid">
+        <% sponsors.platinum.forEach(function(sponsor) { %>
+        <div class="sponsor-card platinum-card">
+          <% if (sponsor.website) { %>
+            <a href="<%= sponsor.website %>" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+          <% } %>
+              <div class="sponsor-content">
+                <% if (sponsor.logo) { %>
+                  <div class="sponsor-logo-wrapper">
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                  </div>
+                <% } else { %>
+                  <div class="sponsor-placeholder">
+                    <div class="placeholder-icon">🏢</div>
+                  </div>
+                <% } %>
+                <div class="sponsor-details">
+                  <h3 class="sponsor-name"><%= sponsor.companyName %></h3>
+                  <% if (sponsor.website) { %>
+                    <div class="sponsor-website">
+                      <span class="website-icon">🔗</span>
+                      <span class="website-url"><%= sponsor.website.replace(/^https?:\/\//, '').replace(/\/$/, '') %></span>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+          <% if (sponsor.website) { %>
+            </a>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (typeof sponsors !== 'undefined' && sponsors.gold && sponsors.gold.length > 0) { %>
+    <!-- Gold Sponsors -->
+    <div class="sponsor-tier">
+      <div class="tier-header">
+        <div class="tier-badge gold">
+          <span class="tier-icon">🥇</span>
+          <span class="tier-label">Gold Partners</span>
+        </div>
+      </div>
+      <div class="sponsors-grid gold-grid">
+        <% sponsors.gold.forEach(function(sponsor) { %>
+        <div class="sponsor-card gold-card">
+          <% if (sponsor.website) { %>
+            <a href="<%= sponsor.website %>" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+          <% } %>
+              <div class="sponsor-content">
+                <% if (sponsor.logo) { %>
+                  <div class="sponsor-logo-wrapper">
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                  </div>
+                <% } else { %>
+                  <div class="sponsor-placeholder">
+                    <div class="placeholder-icon">🏢</div>
+                  </div>
+                <% } %>
+                <div class="sponsor-details">
+                  <h3 class="sponsor-name"><%= sponsor.companyName %></h3>
+                  <% if (sponsor.website) { %>
+                    <div class="sponsor-website">
+                      <span class="website-icon">🔗</span>
+                      <span class="website-url"><%= sponsor.website.replace(/^https?:\/\//, '').replace(/\/$/, '') %></span>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+          <% if (sponsor.website) { %>
+            </a>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (typeof sponsors !== 'undefined' && sponsors.silver && sponsors.silver.length > 0) { %>
+    <!-- Silver Sponsors -->
+    <div class="sponsor-tier">
+      <div class="tier-header">
+        <div class="tier-badge silver">
+          <span class="tier-icon">🥈</span>
+          <span class="tier-label">Silver Partners</span>
+        </div>
+      </div>
+      <div class="sponsors-grid silver-grid">
+        <% sponsors.silver.forEach(function(sponsor) { %>
+        <div class="sponsor-card silver-card">
+          <% if (sponsor.website) { %>
+            <a href="<%= sponsor.website %>" target="_blank" rel="noopener noreferrer" class="sponsor-link">
+          <% } %>
+              <div class="sponsor-content">
+                <% if (sponsor.logo) { %>
+                  <div class="sponsor-logo-wrapper">
+                    <img src="<%= sponsor.logo %>" alt="<%= sponsor.companyName %>" class="sponsor-logo">
+                  </div>
+                <% } else { %>
+                  <div class="sponsor-placeholder">
+                    <div class="placeholder-icon">🏢</div>
+                  </div>
+                <% } %>
+                <div class="sponsor-details">
+                  <h3 class="sponsor-name"><%= sponsor.companyName %></h3>
+                  <% if (sponsor.website) { %>
+                    <div class="sponsor-website">
+                      <span class="website-icon">🔗</span>
+                      <span class="website-url"><%= sponsor.website.replace(/^https?:\/\//, '').replace(/\/$/, '') %></span>
+                    </div>
+                  <% } %>
+                </div>
+              </div>
+          <% if (sponsor.website) { %>
+            </a>
+          <% } %>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
 </section>
 
 <!-- CTA Section -->

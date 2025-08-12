@@ -144,13 +144,11 @@ route.get("/terms-of-service", (req, res) => {
     });
 });
 
-// Admin route to view sponsors (protect this in production)
-route.get("/admin/sponsors", getAllSponsors);
-
 // *********** POST requests **********
 
 // Sponsorship API endpoints
-route.post("/api/sponsor/register", registerSponsor); // For manual payment methods
+// Replace line 65 with:
+route.post("/api/sponsor/register", upload.single('logo'), registerSponsor, handleMulterError);
 route.post("/api/sponsor/zeffy-payment", createZeffyPaymentSession); // For Zeffy payments
 
 // Zeffy webhook endpoint

@@ -196,6 +196,44 @@
     font-size: 0.95rem;
 }
 
+/* File Input Styles */
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.file-input-label {
+    display: block;
+    padding: 0.75rem;
+    background: var(--white);
+    border: 1px dashed #ddd;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #666;
+}
+
+.file-input-label:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.file-input-label.has-file {
+    border-color: var(--success-color, #28a745);
+    color: var(--success-color, #28a745);
+    background: rgba(40, 167, 69, 0.05);
+}
+
 /* Form Sections */
 .form-section {
     margin-bottom: 2.5rem;

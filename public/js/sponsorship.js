@@ -23,6 +23,7 @@
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
     const phoneInput = document.getElementById('phone');
+    const website = document.getElementById('website');
     const errorModal = document.getElementById('errorModal');
     const errorModalClose = document.getElementById('errorModalClose');
     const errorModalOk = document.getElementById('errorModalOk');
@@ -36,6 +37,8 @@
         setupFormHandling();
         setupModalHandling();
         setupPhoneFormatting();
+        setupWebsiteFormatting();
+        setupFileInputHandling();
     }
 
     // Tier Selection
@@ -148,17 +151,18 @@
         
         // Get form data
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
         
-        // Add tier and amount
-        data.tier = selectedTier;
-        data.amount = selectedAmount;
+        formData.append('tier', selectedTier);
+        formData.append('amount', selectedAmount);
+
+        console.log("form:")
+        console.log(form)
         
         // Process registration
-        await processRegistration(data);
+        await processRegistration(formData);
     }
 
-    async function processRegistration(data) {
+    async function processRegistration(formData) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Saving...';
         hideMessages();
@@ -166,8 +170,7 @@
         try {
             const res = await fetch('/api/sponsor/register', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: formData
             });
 
             const result = await res.json();
@@ -288,6 +291,48 @@
                     }
                 }
                 e.target.value = value;
+            });
+        }
+    }
+
+    // Phone Number Formatting
+    function setupWebsiteFormatting() {
+        if (website) {
+            website.addEventListener('input', function(e) {
+                let value = e.target.value.trim();
+                
+                if (value && !value.match(/^https?:\/\//i)) {
+                    // If starts with www, add https://
+                    if (value.match(/^www\./i)) {
+                        value = `https://${value}`;
+                    }
+                    // If contains a dot and looks like a domain, add https://
+                    else if (value.includes('.') && !value.includes(' ')) {
+                        value = `https://${value}`;
+                    }
+                    
+                    e.target.value = value;
+                }
+            });
+        }
+    }
+
+    // File Input Handling
+    function setupFileInputHandling() {
+        const fileInput = document.getElementById('logo');
+        const fileLabel = document.querySelector('.file-input-label');
+        const fileText = document.querySelector('.file-text');
+
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    fileText.textContent = file.name;
+                    fileLabel.classList.add('has-file');
+                } else {
+                    fileText.textContent = 'Upload Company Logo (optional)';
+                    fileLabel.classList.remove('has-file');
+                }
             });
         }
     }
