@@ -4,12 +4,13 @@
 
     // State
     let playerCount = 0;
-    const MIN_PLAYERS = 5;
+    const MIN_PLAYERS = 1;
     const MAX_PLAYERS = 10;
 
     // DOM Elements
     const form = document.getElementById('teamRegistrationForm');
     const playersContainer = document.getElementById('playersContainer');
+    const tierSelect = document.getElementById('tier');
     const addPlayerBtn = document.getElementById('addPlayerBtn');
     const playerCountDisplay = document.getElementById('playerCount');
     const submitBtn = document.getElementById('submitBtn');
@@ -41,6 +42,7 @@
         for (let i = 0; i < MIN_PLAYERS; i++) {
             addPlayer();
         }
+        if (tierSelect) tierSelect.addEventListener('change', updateIdUploadVisibility);
     }
 
     // Player Management
@@ -61,6 +63,7 @@
         playersContainer.appendChild(playerDiv);
         updatePlayerCount();
         updateAddPlayerButton();
+        updateIdUploadVisibility();
     }
 
     function createPlayerCard(playerNum) {
@@ -85,7 +88,7 @@
                 <div class="form-group player-id-upload">
                     <label for="playerIdPhoto${playerNum}">ID Photo *</label>
                     <div class="file-input-wrapper">
-                        <input type="file" id="playerIdPhoto${playerNum}" name="players[${playerNum-1}][idPhoto]" class="file-input" accept="image/*" required>
+                        <input type="file" id="playerIdPhoto${playerNum}" name="players[${playerNum-1}][idPhoto]" class="file-input" accept="image/*">
                         <label for="playerIdPhoto${playerNum}" class="file-input-label">
                             <span class="file-text">Upload School or State ID</span>
                         </label>
@@ -186,6 +189,7 @@
                 playerHeader.appendChild(newRemoveBtn);
             }
         });
+        updateIdUploadVisibility();
     }
 
     function updatePlayerCount() {
@@ -246,6 +250,7 @@
         playerCards.forEach(card => {
             const nameInput = card.querySelector('input[type="text"]');
             const dobInput = card.querySelector('input[type="date"]');
+            const requireIds = tierSelect && tierSelect.value === 'high_school'; 
             const fileInput = card.querySelector('input[type="file"]');
             
             if (!nameInput.value.trim()) {
@@ -261,12 +266,11 @@
             } else {
                 dobInput.style.borderColor = '';
             }
-            
-            if (!fileInput.files[0]) {
-                fileInput.closest('.file-input-wrapper').querySelector('.file-input-label').style.borderColor = 'var(--error-color)';
-                allValid = false;
-            } else {
-                fileInput.closest('.file-input-wrapper').querySelector('.file-input-label').style.borderColor = '';
+        
+            if (requireIds) {
+                const label = fileInput.closest('.file-input-wrapper')?.querySelector('.file-input-label');
+                if (!fileInput.files[0]) { label && (label.style.borderColor = 'var(--error-color)'); allValid = false; }
+                else { label && (label.style.borderColor = ''); }
             }
         });
         
@@ -307,7 +311,7 @@
             showError(err.message || 'Could not save registration. Please try again or contact support.');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Register Team - $300';
+            submitBtn.textContent = 'Register Team';
         }
     }
 
@@ -345,6 +349,30 @@
                     }
                     e.target.value = value;
                 });
+            }
+        });
+    }
+
+    function updateIdUploadVisibility() {
+        const requireIds = tierSelect && tierSelect.value === 'high_school';
+        const idBlocks = document.querySelectorAll('.player-id-upload');
+
+        idBlocks.forEach(block => {
+            block.style.display = requireIds ? '' : 'none';
+
+            // toggle required attribute on the file input inside each block
+            const input = block.querySelector('input[type="file"]');
+            if (input) {
+            input.required = requireIds;
+            if (!requireIds) {
+                // clear any previous selection + visual error/label state
+                input.value = '';
+                const label = block.querySelector('.file-input-label');
+                const text = block.querySelector('.file-text');
+                if (label) label.classList.remove('has-file');
+                if (text)  text.textContent = 'Upload School or State ID';
+                label && (label.style.borderColor = '');
+            }
             }
         });
     }

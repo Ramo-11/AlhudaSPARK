@@ -1,46 +1,8 @@
-// Team Controller for handling team registrations with file uploads
+// Team Controller for handling team registrations with Cloudinary file uploads
 const Team = require('../../models/Team');
 const nodemailer = require('nodemailer');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs').promises;
+const { upload, uploadImageToCloudinary, deleteImageFromCloudinary } = require('./cloudinaryController');
 const { logger } = require('../logger');
-const { log } = require('console');
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = path.join(process.cwd(), 'uploads', 'team-ids');
-        // Ensure directory exists
-        require('fs').mkdirSync(uploadPath, { recursive: true });
-        cb(null, uploadPath);
-    },
-    filename: function (req, file, cb) {
-        // Generate unique filename: teamId-playerIndex-timestamp.extension
-        const timestamp = Date.now();
-        const ext = path.extname(file.originalname);
-        const playerIndex = file.fieldname.match(/\[(\d+)\]/)?.[1] || '0';
-        cb(null, `player-${playerIndex}-${timestamp}${ext}`);
-    }
-});
-
-const fileFilter = (req, file, cb) => {
-    // Only accept image files
-    if (file.mimetype.startsWith('image/')) {
-        cb(null, true);
-    } else {
-        cb(new Error('Only image files are allowed'), false);
-    }
-};
-
-const upload = multer({
-    storage: storage,
-    fileFilter: fileFilter,
-    limits: {
-        fileSize: 5 * 1024 * 1024, // 5MB limit
-        files: 10 // Maximum 10 files (for 10 players)
-    }
-});
 
 // Create email transporter
 const createTransporter = () => {
@@ -54,9 +16,11 @@ const createTransporter = () => {
 };
 
 /**
- * Handle team registration with file uploads
+ * Handle team registration with Cloudinary file uploads
  */
 const registerTeam = async (req, res) => {
+    let uploadedImages = []; // Keep track of uploaded images for cleanup on error
+    
     try {
         logger.info('Processing team registration request');
         const {
@@ -95,8 +59,11 @@ const registerTeam = async (req, res) => {
         }
 
         logger.debug(`Received team registration request: ${JSON.stringify(req.body)}`);
-        // Process players data
-        const playersData = processPlayersData(req.body, req.files);
+        const teamId = Team.generateTeamId();
+        
+        // Process players data with Cloudinary uploads
+        const playersData = await processPlayersDataWithCloudinary(req.body, req.files, teamId);
+        uploadedImages = playersData.uploadedImages || [];
         
         if (!playersData.success) {
             logger.warn(`Player data processing error: ${playersData.error}`);
@@ -115,16 +82,13 @@ const registerTeam = async (req, res) => {
 
         if (existingTeam) {
             logger.warn(`Team already exists: ${teamName} (${coachEmail})`);
+            // Cleanup uploaded images
+            await cleanupCloudinaryImages(uploadedImages);
             return res.status(400).json({
                 success: false,
                 error: 'A team with this name and coach email already exists'
             });
         }
-
-        // Generate team ID
-        const teamId = Team.generateTeamId();
-
-        // Get registration fee
         const fees = Team.getRegistrationFees();
         const registrationFee = fees[tier] || 350;
 
@@ -158,8 +122,9 @@ const registerTeam = async (req, res) => {
         team.calculatePlayerAges();
         
         if (!team.validatePlayerAgesForTier()) {
-            // Clean up uploaded files if age validation fails
-            await cleanupUploadedFiles(playersData.players);
+            logger.error(`Player age validation failed for team: ${teamName} (${teamId})`);
+            // Clean up uploaded images if age validation fails
+            await cleanupCloudinaryImages(uploadedImages);
             return res.status(400).json({
                 success: false,
                 error: `Player ages must be within the ${tier} tier age range`
@@ -168,9 +133,6 @@ const registerTeam = async (req, res) => {
 
         // Save to database
         await team.save();
-
-        // Update file paths with team ID for better organization
-        await updateFilePathsWithTeamId(team);
 
         // Send confirmation email to coach
         await sendTeamConfirmationEmail(team);
@@ -189,15 +151,11 @@ const registerTeam = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Team registration error:', error);
+        logger.error('Error saving team registration:', error);
         
-        // Clean up any uploaded files on error
-        if (req.files && req.files.length > 0) {
-            try {
-                await Promise.all(req.files.map(file => fs.unlink(file.path)));
-            } catch (cleanupError) {
-                console.error('Error cleaning up files:', cleanupError);
-            }
+        // Clean up any uploaded images on error
+        if (uploadedImages.length > 0) {
+            await cleanupCloudinaryImages(uploadedImages);
         }
 
         res.status(500).json({
@@ -208,13 +166,17 @@ const registerTeam = async (req, res) => {
 };
 
 /**
- * Process players data from form and files
+ * Process players data from form and upload files to Cloudinary
  */
-const processPlayersData = (body, files) => {
+const processPlayersDataWithCloudinary = async (body, files, teamId) => {
+    const uploadedImages = [];
+    
     try {
         const players = [];
         const playerFiles = files || [];
-        
+        const requireIds = (body.tier === 'high_school');
+        const teamFolderName = `${body.teamName.replace(/[^a-zA-Z0-9]/g, '_')}_${teamId}`;
+
         // Extract player data from form fields
         let playerIndex = 0;
         while (body.players[playerIndex]) {
@@ -225,6 +187,8 @@ const processPlayersData = (body, files) => {
             logger.debug(`Player ${playerIndex + 1} - Name: ${playerName}, DOB: ${dateOfBirth}`);
 
             if (!playerName || !dateOfBirth) {
+                // Cleanup any images uploaded so far
+                await cleanupCloudinaryImages(uploadedImages);
                 return {
                     success: false,
                     error: `Player ${playerIndex + 1}: Name and date of birth are required`
@@ -236,18 +200,48 @@ const processPlayersData = (body, files) => {
                 file.fieldname === `players[${playerIndex}][idPhoto]`
             );
 
-            if (!playerFile) {
+            if (requireIds && !playerFile) {
+                // Cleanup any images uploaded so far
+                await cleanupCloudinaryImages(uploadedImages);
                 return {
                     success: false,
                     error: `Player ${playerIndex + 1}: ID photo is required`
                 };
             }
 
+            let cloudinaryResult = null;
+            if (playerFile) {
+                try {
+                    // Upload to Cloudinary with team-specific folder
+                    cloudinaryResult = await uploadImageToCloudinary(playerFile.buffer, {
+                        folder: `alhuda_spark/${teamFolderName}/${playerName.replace(/[^a-zA-Z0-9]/g, '_')}_${playerIndex + 1}`,
+                        transformation: [
+                            { width: 800, height: 600, crop: 'limit' },
+                            { quality: 'auto' },
+                            { fetch_format: 'auto' }
+                        ]
+                    });
+                    
+                    uploadedImages.push(cloudinaryResult.public_id);
+                    logger.debug(`Uploaded player ${playerIndex + 1} ID to Cloudinary: ${cloudinaryResult.public_id}`);
+                    
+                } catch (uploadError) {
+                    logger.error(`Error uploading player ${playerIndex + 1} ID to Cloudinary:`, uploadError);
+                    // Cleanup any images uploaded so far
+                    await cleanupCloudinaryImages(uploadedImages);
+                    return {
+                        success: false,
+                        error: `Failed to upload ID photo for player ${playerIndex + 1}`
+                    };
+                }
+            }
+
             players.push({
                 playerName: playerName.trim(),
                 dateOfBirth: new Date(dateOfBirth),
-                idPhotoUrl: playerFile.path,
-                idPhotoOriginalName: playerFile.originalname,
+                idPhotoUrl: cloudinaryResult?.secure_url || null,
+                idPhotoPublicId: cloudinaryResult?.public_id || null,
+                idPhotoOriginalName: playerFile?.originalname || null,
                 ageAtRegistration: 0 // Will be calculated by the model
             });
 
@@ -255,18 +249,18 @@ const processPlayersData = (body, files) => {
         }
 
         // Validate player count
-        if (players.length < 5) {
+        if (players.length < 1) {
             logger.warn(`Insufficient players for team registration: ${players.length}`);
-            cleanupUploadedFiles(players); // Clean up uploaded files
+            await cleanupCloudinaryImages(uploadedImages);
             return {
                 success: false,
-                error: 'Minimum 5 players required'
+                error: 'Minimum 1 player required'
             };
         }
 
         if (players.length > 10) {
             logger.warn('Too many players for team registration');
-            cleanupUploadedFiles(players); // Clean up uploaded files
+            await cleanupCloudinaryImages(uploadedImages);
             return {
                 success: false,
                 error: 'Maximum 10 players allowed'
@@ -275,10 +269,13 @@ const processPlayersData = (body, files) => {
 
         return {
             success: true,
-            players: players
+            players: players,
+            uploadedImages: uploadedImages
         };
 
     } catch (error) {
+        logger.error('Error processing player data:', error);
+        await cleanupCloudinaryImages(uploadedImages);
         return {
             success: false,
             error: 'Error processing player data'
@@ -287,41 +284,20 @@ const processPlayersData = (body, files) => {
 };
 
 /**
- * Update file paths to include team ID for better organization
+ * Clean up uploaded images from Cloudinary
  */
-const updateFilePathsWithTeamId = async (team) => {
+const cleanupCloudinaryImages = async (publicIds) => {
+    if (!publicIds || publicIds.length === 0) return;
+    
     try {
-        const uploadPath = path.join(process.cwd(), 'uploads', 'team-ids', team.teamId);
-        await fs.mkdir(uploadPath, { recursive: true });
-
-        for (let i = 0; i < team.players.length; i++) {
-            const player = team.players[i];
-            const oldPath = player.idPhotoUrl;
-            const filename = path.basename(oldPath);
-            const newPath = path.join(uploadPath, filename);
-
-            // Move file to new location
-            await fs.rename(oldPath, newPath);
-            
-            // Update database path
-            team.players[i].idPhotoUrl = newPath;
-        }
-
-        await team.save();
+        await Promise.all(publicIds.map(publicId => 
+            deleteImageFromCloudinary(publicId).catch(error => 
+                logger.error(`Failed to delete image ${publicId}:`, error)
+            )
+        ));
+        logger.info(`Cleaned up ${publicIds.length} images from Cloudinary`);
     } catch (error) {
-        console.error('Error updating file paths:', error);
-        // Don't throw - registration should still succeed
-    }
-};
-
-/**
- * Clean up uploaded files
- */
-const cleanupUploadedFiles = async (players) => {
-    try {
-        await Promise.all(players.map(player => fs.unlink(player.idPhotoUrl)));
-    } catch (error) {
-        console.error('Error cleaning up uploaded files:', error);
+        logger.error('Error cleaning up Cloudinary images:', error);
     }
 };
 
@@ -515,7 +491,7 @@ const sendAdminNotificationEmail = async (team) => {
                 <td>${index + 1}</td>
                 <td>${player.playerName}</td>
                 <td>${player.ageAtRegistration}</td>
-                <td>${player.idPhotoOriginalName}</td>
+                <td>${player.idPhotoUrl ? `<a href="${player.idPhotoUrl}" target="_blank">View ID</a>` : 'No ID'}</td>
             </tr>`
         ).join('');
 
@@ -656,7 +632,7 @@ const sendAdminNotificationEmail = async (team) => {
                             <div class="action-required">
                                 <h3>⚠️ Action Required</h3>
                                 <p><strong>Payment Method:</strong> ${team.paymentMethod.toUpperCase()}</p>
-                                <p><strong>Document Review:</strong> Player ID photos need verification</p>
+                                <p><strong>Document Review:</strong> Player ID photos stored in Cloudinary need verification</p>
                                 <p>Please monitor for incoming payment and review uploaded documents.</p>
                                 ${team.paymentMethod === 'check' ? '<p>Watch for check arrival via mail.</p>' : ''}
                                 ${team.paymentMethod === 'zelle' ? '<p>Check Zelle account for incoming transfer.</p>' : ''}
@@ -681,6 +657,5 @@ const sendAdminNotificationEmail = async (team) => {
 };
 
 module.exports = {
-    registerTeam,
-    upload: upload.any()
+    registerTeam
 };

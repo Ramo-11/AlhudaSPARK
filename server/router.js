@@ -15,14 +15,15 @@ const {
 } = require("./controllers/sponsorController");
 
 const {
-    registerTeam,
-    upload
+    registerTeam
 } = require("./controllers/teamRegistrationController");
+
+// Import Cloudinary upload middleware
+const { upload, handleMulterError } = require("./controllers/cloudinaryController");
 
 const { 
     submitContactForm 
 } = require("./controllers/contactController");
-
 
 // Environment configuration
 const isProd = process.env.NODE_ENV === "production"
@@ -153,8 +154,8 @@ route.post("/api/sponsor/zeffy-payment", createZeffyPaymentSession); // For Zeff
 // Zeffy webhook endpoint
 route.post("/api/webhooks/zeffy", express.raw({ type: 'application/json' }), handleZeffyWebhook);
 
-// Team registration endpoint
-route.post("/api/team-registration", upload, registerTeam);
+// Team registration endpoint with Cloudinary upload
+route.post("/api/team-registration", upload.any(), registerTeam, handleMulterError);
 
 // Vendor registration endpoint (to be implemented)
 route.post("/api/vendor-registration", (req, res) => {

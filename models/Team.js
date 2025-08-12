@@ -14,12 +14,20 @@ const playerSchema = new mongoose.Schema({
     },
     idPhotoUrl: {
         type: String,
-        required: true,
+        required: function() {
+            return this.parent()?.tier === 'high_school';
+        },
         trim: true
+    },
+    idPhotoPublicId: {
+        type: String,
+        default: null
     },
     idPhotoOriginalName: {
         type: String,
-        required: true,
+        required: function() {
+            return this.parent()?.tier === 'high_school';
+        },
         trim: true
     },
     // Calculated age at registration
@@ -97,7 +105,7 @@ const teamSchema = new mongoose.Schema({
         validate: [
             {
                 validator: function(players) {
-                    return players.length >= 5;
+                    return players.length >= 1;
                 },
                 message: 'Team must have at least 5 players'
             },
@@ -234,9 +242,9 @@ teamSchema.statics.generateTeamId = function() {
 // Static method to get registration fees by tier
 teamSchema.statics.getRegistrationFees = function() {
     return {
-        'elementary': 300,
-        'middle': 300,
-        'high_school': 300
+        'elementary': 350,
+        'middle': 350,
+        'high_school': 350
     };
 };
 
@@ -253,9 +261,9 @@ teamSchema.methods.calculatePlayerAges = function() {
 // Instance method to validate player ages for tier
 teamSchema.methods.validatePlayerAgesForTier = function() {
     const ageRanges = {
-        'elementary': { min: 8, max: 12 },
-        'middle': { min: 13, max: 15 },
-        'high_school': { min: 16, max: 18 }
+        'elementary': { min: 4, max: 11 },
+        'middle': { min: 10, max: 15 },
+        'high_school': { min: 13, max: 20 }
     };
     
     const range = ageRanges[this.tier];
