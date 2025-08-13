@@ -5,7 +5,8 @@ require('dotenv').config();
 // Create transporter for sending emails
 const createTransporter = () => {
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: "smtp.hostinger.com",
+        port: 465,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_APP_PASSWORD
@@ -158,13 +159,10 @@ const submitContactForm = async (req, res) => {
                             Alhuda SPARK
                         </p>
                         <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 14px;">
-                            📧 alhudaspak@gmail.com
+                            📧 info@alhudaspark.org
                         </p>
                         <p style="margin: 0 0 5px 0; color: #6b7280; font-size: 14px;">
-                            📞 (917) 957-6104
-                        </p>
-                        <p style="margin: 0; color: #6b7280; font-size: 14px;">
-                            📍 123 Community Drive, Indianapolis, IN 46240
+                            📞 +1(317) 537-7245
                         </p>
                     </div>
                 </div>

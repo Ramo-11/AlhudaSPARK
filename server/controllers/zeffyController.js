@@ -483,7 +483,7 @@ async function sendAdminNotificationEmail(sponsorData) {
     
     // Admin email content
     const emailContent = {
-        to: process.env.ADMIN_EMAIL || 'admin@alhudaspark.org',
+        to: process.env.ADMIN_EMAIL || 'info@alhudaspark.org',
         subject: `New Sponsor Registration - ${sponsorData.tier} - ${sponsorData.companyName}`,
         html: `
             <h3>New Sponsor Registration</h3>

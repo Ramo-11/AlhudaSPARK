@@ -1,16 +1,20 @@
 // Team Controller for handling team registrations with Cloudinary file uploads
 const Team = require('../../models/Team');
-const nodemailer = require('nodemailer');
 const { upload, uploadImageToCloudinary, deleteImageFromCloudinary } = require('./cloudinaryController');
 const { logger } = require('../logger');
+const nodemailer = require('nodemailer');
 
 // Create email transporter
 const createTransporter = () => {
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: "smtp.hostinger.com",
+        port: 465,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_APP_PASSWORD
+        },
+        tls: {
+            rejectUnauthorized: false
         }
     });
 };
@@ -451,7 +455,7 @@ const sendTeamConfirmationEmail = async (team) => {
                             
                             <p>If you have any questions or need assistance, please don't hesitate to contact us:</p>
                             <p>
-                                <strong>Email:</strong> teams@alhudaspark.org<br>
+                                <strong>Email:</strong> info@alhudaspark.org<br>
                                 <strong>Phone:</strong> (317) 537-7245
                             </p>
                             
@@ -497,7 +501,7 @@ const sendAdminNotificationEmail = async (team) => {
 
         const emailContent = {
             from: `"Alhuda SPARK System" <${process.env.EMAIL_USER}>`,
-            to: process.env.ADMIN_EMAILS || 'admin@alhudaspark.org',
+            to: process.env.ADMIN_EMAILS || 'info@alhudaspark.org',
             subject: `New Team Registration - ${team.teamName} (${team.tierDisplayName})`,
             html: `
                 <!DOCTYPE html>

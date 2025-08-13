@@ -1,17 +1,21 @@
 // Sponsor Controller for handling non-payment gateway registrations
 const Sponsor = require('../../models/Sponsor');
-const nodemailer = require('nodemailer');
 const { upload, uploadImageToCloudinary } = require('./cloudinaryController');
 const { logger } = require('../logger');
+const nodemailer = require('nodemailer');
 
 // Create email transporter
 const createTransporter = () => {
     // Using Gmail as example - replace with your email service
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: "smtp.hostinger.com",
+        port: 465,
         auth: {
             user: process.env.EMAIL_USER,
             pass: process.env.EMAIL_APP_PASSWORD
+        },
+        tls: {
+            rejectUnauthorized: false
         }
     });
 };
@@ -189,7 +193,7 @@ const getPaymentInstructions = (sponsor) => {
             title: 'Payment by Zelle',
             text: 'Please send your Zelle payment using the following information:',
             details: `
-                <strong>Recipient Email:</strong> ${process.env.ZELLE_EMAIL || 'finance@alhudaspark.org'}<br>
+                <strong>Recipient Email:</strong> ${process.env.ZELLE_EMAIL || 'info@alhudaspark.org'}<br>
                 <strong>Recipient Name:</strong> Alhuda SPARK<br>
                 <strong>Amount:</strong> $${sponsor.amount.toLocaleString()}<br>
                 <strong>Memo:</strong> ${sponsor.sponsorId}
@@ -329,7 +333,7 @@ const sendSponsorConfirmationEmail = async (sponsor) => {
                             
                             <p>If you have any questions or need assistance, please don't hesitate to contact us:</p>
                             <p>
-                                <strong>Email:</strong> sponsors@alhudaspark.org<br>
+                                <strong>Email:</strong> info@alhudaspark.org<br>
                                 <strong>Phone:</strong> (317) 537-7245
                             </p>
                             
@@ -366,7 +370,7 @@ const sendAdminNotificationEmail = async (sponsor) => {
         
         const emailContent = {
             from: `"Alhuda SPARK System" <${process.env.EMAIL_USER}>`,
-            to: process.env.ADMIN_EMAILS || 'admin@alhudaspark.org', // Can be comma-separated list
+            to: process.env.ADMIN_EMAILS || 'info@alhudaspark.org', // Can be comma-separated list
             subject: `New ${sponsor.tierDisplayName} Sponsor Registration - ${sponsor.companyName}`,
             html: `
                 <!DOCTYPE html>
