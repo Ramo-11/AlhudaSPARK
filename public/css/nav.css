@@ -31,6 +31,13 @@
     gap: 10px;
 }
 
+.brand-logo {
+    height: 70px;
+    width: auto;
+    object-fit: contain;
+    transition: transform var(--transition-fast);
+}
+
 .brand-text {
     font-size: 1.5rem;
     font-weight: 700;
